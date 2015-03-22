@@ -17,28 +17,57 @@ class ItemsController extends BaseController{
 
         $results =  $query->find();
 
-        $events = array();
+        $items = array();
         foreach ($results as $result) {
-            $events[$result->getObjectId()] = array(
+            $itemElement = array(
+                'itemId' => $result->get('itemId'),
                 'name' => $result->get('name'),
-                'date' => $result->get('description'),
-                'location' => $result->get('price'),
-                'owner_id' => $result->get('event_id'),
-                'description' => $result->get('market'),
+                'category' => $result->get('category'),
+                'image' => $result->get('image'),
+                'price' => $result->get('price'),
+                'event_id' => $result->get('event_id'),
+                'market' => $result->get('market')
             );
+            array_push($items, $itemElement);
         }
-        return Response::json(array('error' => false, 'events'=> $events), 200);
+        return Response::json(array('error' => false, 'items'=> $items), 200);
 
     }
 
-    public function store(){
+    public function show($eventId)
+    {
+
+        $query = new \Parse\ParseQuery('ItemsObject');
+
+        $query->equalTo("event_id", $eventId);
+        $results = $query->find();
+
+        $items = array();
+        foreach ($results as $result) {
+            $itemElement = array(
+                'itemId' => $result->get('itemId'),
+                'name' => $result->get('name'),
+                'category' => $result->get('category'),
+                'image' => $result->get('image'),
+                'price' => $result->get('price'),
+                'event_id' => $result->get('event_id'),
+                'market' => $result->get('market')
+            );
+            array_push($items, $itemElement);
+        }
+        return Response::json(array('error' => false, 'items' => $items), 200);
+    }
+
+        public function store(){
         $validacion = Validator::make(Input::all(), [
 
+            'itemId'=>'required',
             'name' => 'required',
-            'description' => 'required',
+            'category' => 'required',
+            'image' => 'required',
             'price' => 'required',
             'event_id' => 'required',
-            'market' => 'required'
+            'market' => 'required',
         ]);
 
         if ($validacion->fails()) {
@@ -54,11 +83,15 @@ class ItemsController extends BaseController{
         //$php = $object->get("elephant");
 
         // Set values:
+        $object->set("itemId", Input::get('name'));
         $object->set("name", Input::get('name'));
-        $object->set("description", Input::get('date'));
+        $object->set("category", Input::get('category'));
+        $object->set("image", Input::get('image'));
+        $object->set("description", Input::get('description'));
         $object->set('price', Input::get('location'));
         $object->set('event_id', Input::get('event_id'));
         $object->set('market', Input::get('market'));
+
         // Save:
         $object->save();
 

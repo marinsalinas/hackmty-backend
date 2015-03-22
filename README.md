@@ -1,25 +1,27 @@
-## Laravel PHP Framework
+##  tianguis.io
+### SuperMarket API and items storage.
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
+### Inspiration(original idea)
+Our original idea was to create an application where the user was able to create  a list of commonly use products on any type of reunions
+ with his friends via facebook or any other social network with the purpose of facilitating the process of organizing a party,reunion
+or any other type of event.
+The app was supposed to allow the user to create a list of products he or she might need for an event and share it
+with the people attending this event assigning each person  a an item or items so everyone ends up pitching in the 
+same amount of money.
+the app would also compare the price of the same item in several stores and supermarkets therefore helping the users
+to decide where is best for him to buy the item.
 
-Laravel aims to make the development process a pleasing one for the developer without sacrificing application functionality. Happy developers make the best code. To this end, we've attempted to combine the very best of what we have seen in other web frameworks, including frameworks implemented in other languages, such as Ruby on Rails, ASP.NET MVC, and Sinatra.
+### Finding a better solution
+After spending time trying to develop the app we saw the bigger picture and decided to change our solution 
+to better one that can help more people not only the users of the app.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+### New Solution 
+The new solution is to create a new open source API that that provides public methods that search and compare 
+supermarket products.
+This api will allow whoever uses it to compare a vast majority of products on different supermarket therefore allowing
+the user to use the api for developing purposes.
 
-## Official Documentation
 
-Documentation for the entire framework can be found on the [Laravel website](http://laravel.com/docs).
 
-### Contributing To Laravel
 
-**All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

@@ -6,7 +6,7 @@ class SearchController extends BaseController{
         //Con esto le digo que no le aplique el filtro a la funcion store.
         //$this->beforeFilter('auth.token', array('except' => array('store')));
         // ...
-       // \Parse\ParseClient::initialize( "C5WL7pQmVGOnQ8Ln3WF4XWEauewoYXMpaqjLF16W", "qSXH19D28DbAYRakmfl9lhOfxdcf5wFBciRMkWH2", "ggzBT8OCaVJdFvOrYLz4Iy7b3UGJCgiVjksWWfpq" );
+        \Parse\ParseClient::initialize( "C5WL7pQmVGOnQ8Ln3WF4XWEauewoYXMpaqjLF16W", "qSXH19D28DbAYRakmfl9lhOfxdcf5wFBciRMkWH2", "ggzBT8OCaVJdFvOrYLz4Iy7b3UGJCgiVjksWWfpq" );
     }
 
     public function index($query){
@@ -25,12 +25,12 @@ class SearchController extends BaseController{
     }
 
 
-    public function show($query){
+    public function show($queryS){
 
 
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->get("http://api.walmartlabs.com/v1/search?apiKey=rtg9az72zb6k3q5gw4ygjxma&query={$query}&sort=price&ord=asc");
+        $response = $client->get("http://api.walmartlabs.com/v1/search?apiKey=rtg9az72zb6k3q5gw4ygjxma&query={$queryS}&sort=price&ord=asc");
 
         $items = array();
 
@@ -49,6 +49,31 @@ class SearchController extends BaseController{
             );
 
             array_push($items, $itemElement);
+        }
+
+
+
+        $query = new \Parse\ParseQuery('TargetItems');
+
+
+
+        $results =  $query->find();
+
+        foreach ($results as $result) {
+
+            if(preg_match("/{$queryS}/", strtolower($result->get('name')))) {
+
+                $itemElement = array(
+                    'itemId' => $result->get('itemId'),
+                    'name' => $result->get('name'),
+                    'category' => $result->get('category'),
+                    'image' => $result->get('image'),
+                    'price' => $result->get('price'),
+                    'market' => $result->get('market'),
+                    'description'=> ""
+                );
+                array_push($items, $itemElement);
+            }
         }
 
 

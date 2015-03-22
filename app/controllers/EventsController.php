@@ -19,13 +19,15 @@ class EventsController extends BaseController{
 
         $events = array();
         foreach ($results as $result) {
-                $events[$result->getObjectId()] = array(
+                $resultElement = array(
+                    'objectId' => $result->getObjectId(),
                     'name' => $result->get('name'),
                     'date' => $result->get('date'),
                     'location' => $result->get('location'),
                     'owner_id' => $result->get('owner_id'),
                     'description' => $result->get('description'),
                 );
+            array_push($events, $resultElement);
         }
         return Response::json(array('error' => false, 'events'=> $events), 200);
 
