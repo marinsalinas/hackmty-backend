@@ -20,7 +20,8 @@ Route::get('/', function()
 
 //Rutas Para API RESTFUL
     Route::group(array('prefix' => 'api/v1'), function () {
-       Route::resource('events', 'EventsController');
+        Route::resource('events', 'EventsController');
+        Route::resource('search', 'SearchController');
 
-
+        Route::resource('items', 'ItemsController');
     });

@@ -1,6 +1,6 @@
 <?php
 
-class EventsController extends BaseController{
+class ItemsController extends BaseController{
 
     function __construct() {
         //Con esto le digo que no le aplique el filtro a la funcion store.
@@ -11,7 +11,7 @@ class EventsController extends BaseController{
 
     public function index(){
 
-        $query = new \Parse\ParseQuery('EventsObject');
+        $query = new \Parse\ParseQuery('ItemsObject');
 
 
 
@@ -19,13 +19,13 @@ class EventsController extends BaseController{
 
         $events = array();
         foreach ($results as $result) {
-                $events[$result->getObjectId()] = array(
-                    'name' => $result->get('name'),
-                    'date' => $result->get('date'),
-                    'location' => $result->get('location'),
-                    'owner_id' => $result->get('owner_id'),
-                    'description' => $result->get('description'),
-                );
+            $events[$result->getObjectId()] = array(
+                'name' => $result->get('name'),
+                'date' => $result->get('description'),
+                'location' => $result->get('price'),
+                'owner_id' => $result->get('event_id'),
+                'description' => $result->get('market'),
+            );
         }
         return Response::json(array('error' => false, 'events'=> $events), 200);
 
@@ -35,10 +35,10 @@ class EventsController extends BaseController{
         $validacion = Validator::make(Input::all(), [
 
             'name' => 'required',
-            'date' => 'required',
-            'location' => 'required',
-            'owner_id' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'price' => 'required',
+            'event_id' => 'required',
+            'market' => 'required'
         ]);
 
         if ($validacion->fails()) {
@@ -49,16 +49,16 @@ class EventsController extends BaseController{
         }
 
 
-        $object = \Parse\ParseObject::create("EventsObject");
+        $object = \Parse\ParseObject::create("ItemsObject");
         $objectId = $object->getObjectId();
         //$php = $object->get("elephant");
 
         // Set values:
         $object->set("name", Input::get('name'));
-        $object->set("date", Input::get('date'));
-        $object->set('location', Input::get('location'));
-        $object->set('owner_id', Input::get('owner_user'));
-        $object->set('description', Input::get('host'));
+        $object->set("description", Input::get('date'));
+        $object->set('price', Input::get('location'));
+        $object->set('event_id', Input::get('event_id'));
+        $object->set('market', Input::get('market'));
         // Save:
         $object->save();
 
@@ -74,12 +74,12 @@ class EventsController extends BaseController{
 
     public function destroy($id){
 
-        $query = new \Parse\ParseQuery('EventsObject');
+        $query = new \Parse\ParseQuery('ItemsObject');
         $object =  $query->get($id);
         $object->destroy();
 
 
-        return Response::json(array('error'=>true, 'message'=>'Evento borrado'), 200);
+        return Response::json(array('error'=>false, 'message'=>'Evento borrado'), 200);
     }
 
 }

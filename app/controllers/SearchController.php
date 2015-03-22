@@ -1,33 +1,58 @@
 <?php
 
-class EventsController extends BaseController{
+class SearchController extends BaseController{
 
     function __construct() {
         //Con esto le digo que no le aplique el filtro a la funcion store.
         //$this->beforeFilter('auth.token', array('except' => array('store')));
         // ...
-        \Parse\ParseClient::initialize( "C5WL7pQmVGOnQ8Ln3WF4XWEauewoYXMpaqjLF16W", "qSXH19D28DbAYRakmfl9lhOfxdcf5wFBciRMkWH2", "ggzBT8OCaVJdFvOrYLz4Iy7b3UGJCgiVjksWWfpq" );
+       // \Parse\ParseClient::initialize( "C5WL7pQmVGOnQ8Ln3WF4XWEauewoYXMpaqjLF16W", "qSXH19D28DbAYRakmfl9lhOfxdcf5wFBciRMkWH2", "ggzBT8OCaVJdFvOrYLz4Iy7b3UGJCgiVjksWWfpq" );
     }
 
-    public function index(){
-
-        $query = new \Parse\ParseQuery('EventsObject');
+    public function index($query){
 
 
+       $client = new \GuzzleHttp\Client();
 
-        $results =  $query->find();
+        $response = $client->get("http://api.walmartlabs.com/v1/search?apiKey=rtg9az72zb6k3q5gw4ygjxma&query={$query}&sort=price&ord=asc");
 
-        $events = array();
-        foreach ($results as $result) {
-                $events[$result->getObjectId()] = array(
-                    'name' => $result->get('name'),
-                    'date' => $result->get('date'),
-                    'location' => $result->get('location'),
-                    'owner_id' => $result->get('owner_id'),
-                    'description' => $result->get('description'),
-                );
+        $json = $response->json();
+        print_r($json);
+        die();
+
+        //return Response::json(array('error' => false, 'events'=> $response->json()->items), 200);
+
+    }
+
+
+    public function show($query){
+
+
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->get("http://api.walmartlabs.com/v1/search?apiKey=rtg9az72zb6k3q5gw4ygjxma&query={$query}&sort=price&ord=asc");
+
+        $items = array();
+
+        foreach ($response->json()["items"] as $item) {
+
+            $itemElement = array(
+                'itemId'=>$item["itemId"],
+                'price' =>$item["salePrice"],
+                'category' => $item["categoryPath"],
+                'image' => $item['thumbnailImage'],
+                'name' => $item["name"],
+                'description' =>$item["longDescription"],
+                'market' => "walmart"
+
+
+            );
+
+            array_push($items, $itemElement);
         }
-        return Response::json(array('error' => false, 'events'=> $events), 200);
+
+
+        return Response::json(array('error' => false, 'items'=> $items), 200);
 
     }
 
