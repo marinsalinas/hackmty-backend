@@ -6,10 +6,31 @@ class EventsController extends BaseController{
         //Con esto le digo que no le aplique el filtro a la funcion store.
         //$this->beforeFilter('auth.token', array('except' => array('store')));
         // ...
+        \Parse\ParseClient::initialize( "C5WL7pQmVGOnQ8Ln3WF4XWEauewoYXMpaqjLF16W", "qSXH19D28DbAYRakmfl9lhOfxdcf5wFBciRMkWH2", "ggzBT8OCaVJdFvOrYLz4Iy7b3UGJCgiVjksWWfpq" );
     }
 
     public function index(){
-        return Response::json(array('error' => false, 'user'=> "USER"), 200);
+
+        $query = new \Parse\ParseQuery('EventsObject');
+
+
+
+        $results =  $query->find();
+
+        $events = array();
+        foreach ($results as $result) {
+                $events[$result->getObjectId()] = array(
+                    'name' => $result->get('name'),
+                    'date' => $result->get('date'),
+                    'location' => $result->get('location'),
+                    'owner_id' => $result->get('owner_id'),
+                    'description' => $result->get('description'),
+                );
+        }
+        print_r($events);
+        die();
+        return Response::json(array('error' => false, 'events'=> $events), 200);
+
     }
 
     public function store(){
@@ -18,13 +39,31 @@ class EventsController extends BaseController{
             'name' => 'required',
             'date' => 'required',
             'location' => 'required',
-            'host' => 'required',
+            'owner_id' => 'required',
+            'description' => 'required'
         ]);
 
         if ($validacion->fails()) {
 
+
+
             return Response::json(array('error'=>true, 'messages' => $validacion->messages()), 400);
         }
+
+
+        $object = \Parse\ParseObject::create("EventsObject");
+        $objectId = $object->getObjectId();
+        //$php = $object->get("elephant");
+
+        // Set values:
+        $object->set("name", Input::get('name'));
+        $object->set("date", Input::get('date'));
+        $object->set('location', Input::get('location'));
+        $object->set('owner_id', Input::get('owner_user'));
+        $object->set('description', Input::get('host'));
+        // Save:
+        $object->save();
+
 
         return Response::json(array('error'=>false, 'event'=>Input::all()), 200);
     }
