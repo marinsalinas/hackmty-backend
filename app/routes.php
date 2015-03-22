@@ -18,7 +18,7 @@ Route::get('/', function()
 
 
 
-/Rutas Para API RESTFUL
+//Rutas Para API RESTFUL
     Route::group(array('prefix' => 'api/v1'), function () {
        Route::resource('events', 'EventsController');
 
