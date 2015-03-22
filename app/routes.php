@@ -15,3 +15,12 @@ Route::get('/', function()
 {
 	return View::make('hello');
 });
+
+
+
+/Rutas Para API RESTFUL
+    Route::group(array('prefix' => 'api/v1'), function () {
+       Route::resource('events', 'EventsController');
+
+
+    });
